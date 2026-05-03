@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>StudyBuddy</title>
+<link rel="icon" type="image/png" href="favicon.png"/>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --blue: #1B3FAB;
+    --blue-mid: #2563C7;
+    --blue-light: #4A90E2;
+    --blue-pale: #E6F0FF;
+    --blue-soft: #B1C9EF;
+    --navy: #0D2260;
+    --white: #FFFFFF;
+    --off: #F4F7FF;
+    --text: #0F1B3D;
+    --muted: #5A6A8A;
+    --accent: #628ECB;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--white);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 5%;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(27,63,171,0.08);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Syne', sans-serif;
+    font-weight: 800; font-size: 1.25rem;
+    color: var(--blue);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--blue-light); }
+  .nav-pill {
+    background: var(--blue);
+    color: #fff;
+    padding: 10px 22px;
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .nav-pill:hover { background: var(--navy); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 5% 80px;
+    position: relative;
+    background: linear-gradient(160deg, #fff 0%, var(--blue-pale) 60%, #fff 100%);
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -200px; right: -200px;
+    width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(74,144,226,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute; bottom: -150px; left: -150px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(27,63,171,0.08) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--blue-pale);
+    border: 1px solid var(--blue-soft);
+    color: var(--blue);
+    font-size: 0.8rem; font-weight: 500;
+    padding: 6px 16px; border-radius: 100px;
+    margin-bottom: 28px;
+    animation: fadeUp 0.6s ease both;
+  }
+  .hero-badge::before { content: '●'; font-size: 0.5rem; color: #22C55E; }
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--text);
+    max-width: 820px;
+    animation: fadeUp 0.6s 0.1s ease both;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--blue);
+    position: relative;
+  }
+  .hero h1 em::after {
+    content: '';
+    position: absolute; bottom: -4px; left: 0; right: 0;
+    height: 4px; border-radius: 2px;
+    background: var(--blue-light);
+  }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    margin: 24px auto 40px;
+    font-weight: 300;
+    animation: fadeUp 0.6s 0.2s ease both;
+  }
+  .hero-actions {
+    display: flex; align-items: center; gap: 16px;
+    flex-wrap: wrap; justify-content: center;
+    animation: fadeUp 0.6s 0.3s ease both;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: var(--blue);
+    color: #fff;
+    padding: 16px 32px;
+    border-radius: 100px;
+    font-size: 1rem; font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 8px 32px rgba(27,63,171,0.25);
+  }
+  .btn-primary:hover {
+    background: var(--navy);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(27,63,171,0.35);
+  }
+  .btn-primary svg { width: 20px; height: 20px; }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--blue);
+    font-size: 0.95rem; font-weight: 500;
+    text-decoration: none;
+    padding: 16px 8px;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--blue); }
+
+  /* STATS STRIP */
+  .stats {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 0; background: var(--navy);
+    padding: 48px 5%;
+  }
+  .stat {
+    flex: 1; min-width: 160px;
+    text-align: center;
+    padding: 0 32px;
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+  .stat:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 2.5rem; font-weight: 800;
+    color: #fff; display: block;
+  }
+  .stat-label { font-size: 0.85rem; color: var(--blue-soft); margin-top: 4px; }
+
+  /* SECTION BASE */
+  section { padding: 100px 5%; }
+  .section-tag {
+    display: inline-block;
+    font-size: 0.75rem; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 2px;
+    color: var(--blue); background: var(--blue-pale);
+    padding: 6px 14px; border-radius: 100px;
+    margin-bottom: 20px;
+  }
+  .section-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800; line-height: 1.15;
+    color: var(--text); margin-bottom: 16px;
+  }
+  .section-sub {
+    font-size: 1.05rem; color: var(--muted);
+    line-height: 1.7; max-width: 520px;
+    font-weight: 300;
+  }
+
+  /* FEATURES */
+  .features { background: var(--off); }
+  .features-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  .features-text .section-sub { max-width: 440px; }
+  .feature-list { margin-top: 40px; display: flex; flex-direction: column; gap: 28px; }
+  .feature-item { display: flex; gap: 18px; align-items: flex-start; }
+  .feature-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    background: var(--blue); display: flex;
+    align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 1.3rem;
+  }
+  .feature-item h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    margin-bottom: 4px; color: var(--text);
+  }
+  .feature-item p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+  .features-visual {
+    position: relative; display: flex;
+    justify-content: center; align-items: center;
+  }
+  .phone-mock {
+    width: 260px; height: 520px;
+    background: var(--navy);
+    border-radius: 40px;
+    border: 6px solid #1e3a7a;
+    position: relative; overflow: hidden;
+    box-shadow: 0 40px 80px rgba(13,34,96,0.3), 0 0 0 1px rgba(255,255,255,0.05);
+  }
+  .phone-notch {
+    position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
+    width: 80px; height: 22px;
+    background: #0D2260; border-radius: 100px; z-index: 2;
+  }
+  .phone-screen {
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, #1B3FAB 0%, #0D2260 100%);
+    display: flex; flex-direction: column; align-items: center;
+    padding: 60px 20px 20px;
+  }
+  .phone-header {
+    font-family: 'Syne', sans-serif;
+    color: rgba(255,255,255,0.5); font-size: 0.65rem;
+    font-weight: 600; letter-spacing: 1px; margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  .match-card {
+    width: 100%; background: rgba(255,255,255,0.1);
+    border-radius: 20px; padding: 18px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+  .match-title {
+    font-family: 'Syne', sans-serif;
+    color: #fff; font-size: 1rem; font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .match-sub { color: rgba(255,255,255,0.6); font-size: 0.7rem; }
+  .match-avatars {
+    display: flex; align-items: center;
+    justify-content: space-between; margin: 24px 0 16px;
+  }
+  .avatar-circle {
+    width: 52px; height: 52px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Syne', sans-serif; font-size: 1.1rem;
+    font-weight: 800; color: #fff;
+  }
+  .av1 { background: #8BC34A; }
+  .av2 { background: rgba(255,255,255,0.15); font-size: 1.3rem; }
+  .pulse-wrap { position: relative; }
+  .pulse-wrap::before, .pulse-wrap::after {
+    content: ''; position: absolute; inset: -8px;
+    border-radius: 50%; border: 1px solid rgba(255,255,255,0.2);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .pulse-wrap::after { inset: -16px; animation-delay: 0.5s; }
+  @keyframes pulse {
+    0% { opacity: 0.6; transform: scale(1); }
+    100% { opacity: 0; transform: scale(1.3); }
+  }
+  .wave-line { font-size: 1.2rem; }
+  .match-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tag {
+    background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.8);
+    font-size: 0.6rem; padding: 4px 10px; border-radius: 100px;
+    font-weight: 500;
+  }
+  .connect-btn {
+    width: 100%; background: #4A90E2; color: #fff;
+    border: none; border-radius: 12px; padding: 12px;
+    font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700;
+    margin-top: 14px; cursor: pointer;
+  }
+  .floating-card {
+    position: absolute; background: #fff;
+    border-radius: 16px; padding: 12px 16px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+    font-size: 0.75rem;
+  }
+  .fc1 { top: 60px; right: -30px; min-width: 140px; }
+  .fc2 { bottom: 80px; left: -30px; min-width: 130px; }
+  .fc-label { color: var(--muted); margin-bottom: 4px; }
+  .fc-val { font-family: 'Syne', sans-serif; font-weight: 700; color: var(--text); }
+  .fc-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #22C55E; margin-right: 5px; }
+
+  /* HOW IT WORKS */
+  .how { background: var(--white); }
+  .how-inner { max-width: 1000px; margin: 0 auto; }
+  .how-header { text-align: center; margin-bottom: 60px; }
+  .how-header .section-sub { margin: 0 auto; }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 32px;
+  }
+  .step {
+    position: relative; text-align: center;
+    padding: 40px 24px 32px;
+    background: var(--off);
+    border-radius: 24px;
+    border: 1px solid rgba(27,63,171,0.06);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .step:hover { transform: translateY(-6px); box-shadow: 0 20px 60px rgba(27,63,171,0.08); }
+  .step-num {
+    position: absolute; top: -16px; left: 50%; transform: translateX(-50%);
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--blue); color: #fff;
+    font-family: 'Syne', sans-serif; font-size: 0.85rem; font-weight: 800;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .step-icon { font-size: 2rem; margin-bottom: 16px; }
+  .step h3 {
+    font-family: 'Syne', sans-serif; font-size: 1rem;
+    font-weight: 700; margin-bottom: 10px; color: var(--text);
+  }
+  .step p { font-size: 0.875rem; color: var(--muted); line-height: 1.6; }
+
+  /* ABOUT */
+  .about { background: var(--off); }
+  .about-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; align-items: center;
+  }
+  .about-cards { display: flex; flex-direction: column; gap: 16px; }
+  .about-card {
+    background: #fff; border-radius: 20px;
+    padding: 24px; border: 1px solid rgba(27,63,171,0.08);
+    transition: transform 0.2s;
+  }
+  .about-card:hover { transform: translateX(6px); }
+  .about-card-top {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 10px;
+  }
+  .about-card-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--blue-pale); font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem; font-weight: 700; color: var(--text);
+  }
+  .about-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; }
+  .team-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    margin-top: 24px;
+  }
+  .team-chip {
+    background: var(--blue-pale); border-radius: 12px;
+    padding: 10px 12px; text-align: center;
+    font-size: 0.75rem; color: var(--blue); font-weight: 500;
+    border: 1px solid var(--blue-soft);
+  }
+
+  /* DOWNLOAD */
+  .download {
+    background: var(--navy);
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .download::before {
+    content: '';
+    position: absolute; top: -200px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(74,144,226,0.15) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .download-inner { position: relative; z-index: 1; max-width: 640px; margin: 0 auto; }
+  .download h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 800; color: #fff; margin-bottom: 16px;
+  }
+  .download p {
+    font-size: 1.05rem; color: var(--blue-soft);
+    line-height: 1.7; font-weight: 300; margin-bottom: 40px;
+  }
+  .download-btn {
+    display: inline-flex; align-items: center; gap: 14px;
+    background: #fff; color: var(--navy);
+    padding: 18px 36px; border-radius: 100px;
+    font-family: 'Syne', sans-serif;
+    font-size: 1rem; font-weight: 700;
+    text-decoration: none;
+    transition: all 0.2s;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+  .download-btn:hover {
+    background: var(--blue-pale);
+    transform: translateY(-3px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.3);
+  }
+  .download-btn svg { width: 22px; height: 22px; }
+  .download-note {
+    margin-top: 20px; font-size: 0.8rem;
+    color: rgba(177,201,239,0.6);
+  }
+  .download-specs {
+    display: flex; justify-content: center; gap: 32px;
+    margin-top: 48px; flex-wrap: wrap;
+  }
+  .spec {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--blue-soft); font-size: 0.85rem;
+  }
+  .spec-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--blue-light); }
+
+  /* FOOTER */
+  footer {
+    background: #060E24;
+    padding: 32px 5%;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-wrap: wrap; gap: 16px;
+  }
+  .footer-logo {
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    color: rgba(255,255,255,0.4); font-size: 1rem;
+  }
+  .footer-logo span { color: rgba(74,144,226,0.5); }
+  footer p { font-size: 0.8rem; color: rgba(255,255,255,0.25); }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    .features-inner, .about-inner { grid-template-columns: 1fr; gap: 40px; }
+    .features-visual { order: -1; }
+    .phone-mock { width: 220px; height: 440px; }
+    .fc1, .fc2 { display: none; }
+    .stat { padding: 16px 20px; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .stat:last-child { border-bottom: none; }
+    .stats { flex-direction: column; }
+    .team-grid { grid-template-columns: repeat(2, 1fr); }
+    .about-inner { order: 0; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">Study<span>Buddy</span></a>
+  <a href="#download" class="nav-pill">Download APK</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">QCU Students · Peer Learning Platform</div>
+  <h1>Find Your <em>Perfect</em><br/>Study Partner</h1>
+  <p class="hero-sub">StudyBuddy connects QCU students based on subjects, skill levels, and learning goals — so no one has to struggle alone.</p>
+  <div class="hero-actions">
+    <a href="#download" class="btn-primary">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7z"/>
+        <circle cx="12" cy="9" r="2.5"/>
+      </svg>
+      Download for Android
+    </a>
+    <a href="#features" class="btn-secondary">See Features →</a>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat">
+    <span class="stat-num">100+</span>
+    <div class="stat-label">Avatars to choose from</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">28</span>
+    <div class="stat-label">IT Subjects covered</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">5★</span>
+    <div class="stat-label">Peer rating system</div>
+  </div>
+  <div class="stat">
+    <span class="stat-num">QCU</span>
+    <div class="stat-label">Students only community</div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="features-inner">
+    <div class="features-text">
+      <div class="section-tag">Core Features</div>
+      <h2 class="section-title">Everything you need to study smarter</h2>
+      <p class="section-sub">A full-featured platform built specifically for QCU students to connect, collaborate, and grow together.</p>
+      <div class="feature-list">
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div>
+            <h3>Smart Matching Algorithm</h3>
+            <p>Matches you with peers based on subjects you need help with and subjects you can teach — mutual benefit guaranteed.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💬</div>
+          <div>
+            <h3>Buddy Talk — Timed Chat</h3>
+            <p>Real-time messaging with session timers, wave greetings, and QR code connections. Chat stays focused and purposeful.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">📸</div>
+          <div>
+            <h3>Study Moments Feed</h3>
+            <p>A social hub exclusive to QCU — share resources, ask questions, celebrate wins, and engage with the whole community.</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🪪</div>
+          <div>
+            <h3>Student ID Verification</h3>
+            <p>Camera-based QCU ID scanning with OCR verification ensures a safe, trusted community of real students only.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="features-visual">
+      <div class="phone-mock">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-header">Find Study Buddy</div>
+          <div class="match-card">
+            <div class="match-title">Matching Success 🎉</div>
+            <div class="match-sub">We found your ideal study buddy!</div>
+            <div class="match-avatars">
+              <div class="avatar-circle av1">N</div>
+              <div class="wave-line">〰</div>
+              <div class="pulse-wrap">
+                <div class="avatar-circle av2">?</div>
+              </div>
+            </div>
+            <div class="match-tags">
+              <span class="tag">21 yrs old</span>
+              <span class="tag">Teaching CC106</span>
+              <span class="tag">SA2</span>
+            </div>
+            <button class="connect-btn">Connect</button>
+          </div>
+        </div>
+      </div>
+      <div class="floating-card fc1">
+        <div class="fc-label">Subjects matched</div>
+        <div class="fc-val">CC106, IPT101</div>
+      </div>
+      <div class="floating-card fc2">
+        <div class="fc-val"><span class="fc-dot"></span>3 online now</div>
+        <div class="fc-label" style="margin-top:3px">Near your area</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="how" id="how">
+  <div class="how-inner">
+    <div class="how-header">
+      <div class="section-tag">How It Works</div>
+      <h2 class="section-title">Up and running in minutes</h2>
+      <p class="section-sub">From download to your first study session — the whole process is designed to be fast and friction-free.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-icon">📥</div>
+        <h3>Download & Sign In</h3>
+        <p>Install the APK and sign in with your Google account. No passwords to remember.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-icon">🪪</div>
+        <h3>Verify Your ID</h3>
+        <p>Scan your QCU Student ID with the camera. The app reads your name and student number automatically.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-icon">📚</div>
+        <h3>Set Your Subjects</h3>
+        <p>Choose subjects you can teach and subjects you need help with. Rate your confidence per subject.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">4</div>
+        <div class="step-icon">🤝</div>
+        <h3>Get Matched & Connect</h3>
+        <p>The algorithm finds mutual matches. Send a wave, start chatting, and start learning together.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="about-inner">
+    <div>
+      <div class="section-tag">About the Project</div>
+      <h2 class="section-title">Built by QCU students, for QCU students</h2>
+      <p class="section-sub">StudyBuddy is a CC106 Application Development course project — a Smart Peer Learning Matchmaking System designed to bridge the gap between students who need guidance and those who can provide it.</p>
+      <div class="team-grid">
+        <div class="team-chip">Marcaida, J.M.</div>
+        <div class="team-chip">Legaspina, N.K.</div>
+        <div class="team-chip">Laurente, S.M.</div>
+        <div class="team-chip">Manlangit, D.J.</div>
+        <div class="team-chip">Santos, R.M.</div>
+        <div class="team-chip">Vestidas, J.T.</div>
+      </div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:16px;">SBIT-3O · Instructor: Ms. Mary Jean M. Jayobo</p>
+    </div>
+    <div class="about-cards">
+      <div class="about-card">
+        <div class="about-card-top">
+          <div class="about-card-icon">🧩</div>
+          <h3>The Problem</h3>
+        </div>
+        <p>Many students struggle with self-paced learning and feel disconnected when studying in isolation — even with AI tools, there's a lack of real human-to-human engagement for complex concepts.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-top">
+          <div class="about-card-icon">💡</div>
+          <h3>The Solution</h3>
+        </div>
+        <p>StudyBuddy uses a competency-based matching algorithm to instantly connect students with peers who excel in the areas they struggle with — and vice versa, creating genuinely mutual partnerships.</p>
+      </div>
+      <div class="about-card">
+        <div class="about-card-top">
+          <div class="about-card-icon">⚙️</div>
+          <h3>Tech Stack</h3>
+        </div>
+        <p>Built with React Native (Expo), Firebase Firestore, Firebase Auth, and real-time presence tracking. OCR-powered ID verification via camera. Deployed as a native Android APK.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="download" id="download">
+  <div class="download-inner">
+    <h2>Ready to find your study buddy?</h2>
+    <p>Download the StudyBuddy APK directly to your Android device. No Play Store required — just install and start learning with your peers.</p>
+    <a href="https://download856.mediafire.com/0rf3tqnb6lygw_ihFJ7GVR-3vY2HTkAP4_2j070VbMp3X9hepcp86WeeG8_c9v-50pPy4m0LRrNUEASnnGkwDPpwHXI8j6d5-kebc6uO7AMz2w_XrMV8_-RX1pD-dUdx3Vcs6yAzNCS0ZOqQvXWO8AagygMlgAxDr3u3vmTK0Q/vh90xt2h9qyeauk/StudyBuddy-v1.0.apk" class="download-btn" download="StudyBuddy-v1.0.apk">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M17.5 2.5L12 8l-5.5-5.5L5 4l7 7 7-7-1.5-1.5zM5 20h14v-2H5v2zm7-4l-7-7 1.5-1.5L11 12V4h2v8l4.5-4.5L19 9l-7 7z"/>
+      </svg>
+      Download APK
+    </a>
+    <p class="download-note">Android 8.0+ required · ~160MB · Free</p>
+    <div class="download-specs">
+      <div class="spec"><div class="spec-dot"></div>Google Sign-In</div>
+      <div class="spec"><div class="spec-dot"></div>Real-time Chat</div>
+      <div class="spec"><div class="spec-dot"></div>ID Verification</div>
+      <div class="spec"><div class="spec-dot"></div>QCU Students Only</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">Study<span>Buddy</span></div>
+  <p>CC106 · SBIT-3O · Quezon City University · 2026</p>
+</footer>
+
+</body>
+</html>
